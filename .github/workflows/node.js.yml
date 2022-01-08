@@ -18,16 +18,29 @@ jobs:
         run:  |
           npm install
           npm run build
+      # 다른 job 에 연결할 수 있도록 upload-artifact 를 이용한다
+      # github built-in storage 에 업로드한다
+      - uses: actions/upload-artifact@master
+        with:
+          name: webpack artifacts
+          path: public/ 
   test:
     runs-on: ubuntu-latest
     strategy:
+      # matrix 를 이용하면 여러 경우의 환경에서 실행해볼 수 있다
       matrix:
         os: [ubuntu-latest, windows-2016]
         node-version: [12.x, 14.x, 16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
+    # 내 레포지토리 코드 복사
     - uses: actions/checkout@v2
+    # built-in storage 에서 다운로드한다
+    - uses: actions/download-artifact@master
+      with:
+        name: webpack artifacts
+        path: public
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v2
       with:
