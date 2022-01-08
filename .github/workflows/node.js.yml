@@ -25,6 +25,8 @@ jobs:
           name: webpack artifacts
           path: public/ 
   test:
+    # build job 이 끝난 이후에 test 가 실행될 수 있도록 한다
+    needs: build
     runs-on: ubuntu-latest
     strategy:
       # matrix 를 이용하면 여러 경우의 환경에서 실행해볼 수 있다
